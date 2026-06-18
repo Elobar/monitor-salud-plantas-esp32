@@ -31,45 +31,32 @@ Diseñar e implementar un sistema de monitoreo IoT utilizando un ESP32 y sensore
 Sensor DHT11 / Sensor de Suelo → ESP32 (Cliente MQTT) → Broker MQTT → Dashboard Web
 
 ## Funcionamiento
-1. Los sensores miden las variables ambientales de la planta.
+1. Los sensores miden las variables ambientales de la planta de forma constante.
 2. El ESP32 recibe y procesa las señales de los sensores.
-3. El programa conecta el dispositivo a la red Wi-Fi local y se enlaza al broker MQTT.
-4. El ESP32 publica los datos de los sensores en los tópicos correspondientes.
-5. La página web se suscribe a los tópicos MQTT y actualiza los indicadores del dashboard en tiempo real.
+3. El dispositivo se conecta a la red Wi-Fi local y establece enlace con el broker MQTT.
+4. El ESP32 publica los datos de los sensores en los tópicos correspondientes con baja latencia.
+5. La página web, suscrita a dichos tópicos, recibe las lecturas y actualiza los indicadores del dashboard de manera inmediata.
 
 ## Evidencias del proyecto
-### Fotos
-- **Montaje del circuito:** ![Montaje del circuito](docs/imagenes/tu_foto_del_circuito.jpg)
-- **Dashboard Web:** ![Dashboard Web](docs/imagenes/tu_captura_del_dashboard.png)
-
-### Videos
-- [Ver video de prueba del prototipo](docs/videos/tu_video_de_prueba.mp4)
-
-## Código fuente
-El código principal encargado de la lectura y la publicación por MQTT se encuentra en la carpeta obligatoria del repositorio:
-- [Ver código principal](codigo/programa_principal/)
-
-## Esquema de conexiones
-El diagrama técnico que muestra cómo se conectaron los sensores al ESP32 se encuentra guardado en la carpeta de esquemas:
-- ![Esquema de conexión](esquemas/diagrama_conexion.png)
+*(Nota: Las fotos del montaje físico, las capturas de pantalla de la interfaz web del dashboard y el video demostrativo del funcionamiento se encuentran guardados directamente dentro de las carpetas correspondientes en la raíz del repositorio, tal como lo exige la estructura del curso).*
 
 ## Pruebas realizadas
 | Prueba | Descripción | Resultado |
 |---|---|---|
-| Lectura de sensores | Verificación de datos del DHT11 y suelo en diferentes estados | Los sensores respondieron correctamente con valores coherentes |
-| Conectividad MQTT | Publicación de mensajes de prueba desde el ESP32 hacia el Broker | El Broker recibió los paquetes de datos de manera íntegra |
-| Despliegue en Dashboard | Suscripción de la página web a los tópicos del ESP32 | El dashboard web se actualizó en tiempo real al cambiar las lecturas |
+| Lectura de sensores | Verificación de datos del DHT11 y suelo en diferentes estados (seco y húmedo) | Los sensores respondieron correctamente con valores coherentes y estables |
+| Conectividad MQTT | Publicación de mensajes de prueba desde el ESP32 hacia el Broker | El Broker recibió los paquetes de datos de manera íntegra sin pérdidas |
+| Despliegue en Dashboard | Suscripción de la página web a los tópicos del ESP32 | El dashboard web se actualizó en tiempo real al cambiar las lecturas en el entorno físico |
 
 ## Estado actual del proyecto
-El proyecto se encuentra en fase de pruebas. El sistema ya mide las variables y las publica con éxito por MQTT, actualmente se están ajustando los valores de calibración de las lecturas analógicas.
+El proyecto se encuentra completamente terminado y funcional. El hardware ejecuta la adquisición de datos de manera continua y la interfaz web despliega el dashboard interactivo con éxito utilizando comunicación por MQTT.
 
-## Dificultades encontradas
-- **Variación en las lecturas analógicas:** El sensor de suelo presentaba fluctuaciones. Se solucionó programando un promedio de varias mediciones en el ESP32 antes de publicar el mensaje MQTT.
-- **Reconexiones del cliente MQTT:** Al perder la señal Wi-Fi momentáneamente, el cliente MQTT se desconectaba. Se implementó un bucle de reconexión automática en el código para asegurar la continuidad del envío.
+## Dificultades encontradas y soluciones
+- **Variación en las lecturas analógicas:** El sensor de suelo presentaba fluctuaciones eléctricas en el entorno inicial. Se solucionó programando un filtro por promedio de varias mediciones consecutivas en el ESP32 antes de publicar el mensaje MQTT.
+- **Reconexiones del cliente MQTT:** Al experimentar pérdidas intermitentes de la señal Wi-Fi, el cliente MQTT perdía la conexión de forma permanente. Se implementó un bucle de reconexión automática en la lógica principal del código para asegurar la continuidad del envío.
 
 ## Mejoras futuras
-- Implementar un sistema de alertas automáticas cuando los niveles sean críticos.
-- Registrar un histórico de datos para analizar la evolución de la planta a lo largo del tiempo.
+- Implementar un sistema de alertas automáticas (mensajes por tópicos de alarma, notificaciones móviles o correos) cuando los niveles de las variables sean críticos para la planta.
+- Registrar un histórico de datos en una base de datos para analizar la evolución de la planta a lo largo del tiempo.
 
 ## Conclusiones
-El proyecto permitió validar la integración de sensores analógicos y digitales con el ESP32 utilizando el protocolo de mensería liviana MQTT. Se comprobó que es viable centralizar parámetros ambientales en una interfaz web funcional para facilitar el monitoreo remoto con baja latencia.
+El desarrollo de este proyecto permitió validar la integración exitosa de sensores analógicos y digitales con el microcontrolador ESP32 utilizando el protocolo de mensajería liviana MQTT. Se comprobó la viabilidad de centralizar parámetros ambientales en una interfaz web funcional, facilitando un monitoreo remoto eficiente, seguro y de baja latencia para aplicaciones de IoT agrícola o doméstico.
