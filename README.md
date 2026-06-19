@@ -56,7 +56,7 @@ El ESP32 se conecta a una red WiFi y publica un mensaje JSON al topic `planta/da
 
 ### Fotos
 Las fotos del montaje del circuito:
-![Circuito activo](docs/imagenes/activo.jpg)
+[Circuito activo](docs/imagenes/activo.jpg)
 
 
 ### Videos
