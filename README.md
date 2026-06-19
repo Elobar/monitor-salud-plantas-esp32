@@ -73,7 +73,7 @@ Para insertarlas en este README:
 
 ### Videos
 El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
-[Ver video de funcionamiento](docs/videos/prueba_conjunta.mp4)
+[Ver video de funcionamiento](https://drive.google.com/file/d/1LF3oYPrtLresuND9U_8BYQq1s2_3Niay/view?usp=sharing)
 
 ## Código fuente
 El código se organiza en dos partes dentro de la carpeta `codigo/`:
