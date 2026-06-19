@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor de Plantas — ESP32</title>
+  <meta name="description" content="Monitor IoT de planta con ESP32, DHT11 y sensor HW-080" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navbar ──────────────────────────────────────────────── -->
+  <nav class="navbar-custom">
+    <div class="wrapper">
+      <div class="d-flex align-items-center justify-content-between">
+
+        <a href="#" class="nav-brand">
+          <div class="nav-brand-icon">🌿</div>
+          <div>
+            <div class="nav-brand-text">Monitor de Plantas</div>
+            <div class="nav-brand-sub">ESP32 · DHT11 · MQTT</div>
+          </div>
+        </a>
+
+        <div class="d-flex align-items-center gap-3">
+          <span class="last-update-badge" id="last-update">Esperando datos...</span>
+          <div class="conn-badge">
+            <span class="conn-dot" id="conn-dot"></span>
+            <span id="conn-text">Sin conexión</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main content ────────────────────────────────────────── -->
+  <main>
+    <div class="wrapper">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+          <div>
+            <div class="page-eyebrow">Monitor en tiempo real</div>
+            <h1 class="page-title">Panel de <span>salud</span> de la planta</h1>
+            <p class="page-subtitle">DHT11 · Sensor HW-080 · Protocolo MQTT</p>
+          </div>
+          <span class="plant-status-pill optimal" id="plant-badge">
+            <span>✓</span> Óptimo
+          </span>
+        </div>
+      </div>
+
+      <!-- ── Metric cards ─────────────────────────────────────── -->
+      <div class="mb-section">
+        <div class="section-label">Lecturas actuales</div>
+        <div class="row g-3">
+
+          <!-- Temperatura -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card temp h-100">
+              <div class="metric-icon" style="background:rgba(217,64,64,0.12);color:#f08080;">
+                <i class="bi bi-thermometer-half"></i>
+              </div>
+              <div class="metric-label">Temperatura</div>
+              <div>
+                <span class="metric-value" id="val-temp">--</span>
+                <span class="metric-unit">°C</span>
+              </div>
+              <div class="metric-sub" id="sub-temp">Esperando datos...</div>
+              <div class="metric-trend flat" id="trend-temp">— sin datos</div>
+            </div>
+          </div>
+
+          <!-- Humedad aire -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card hum h-100">
+              <div class="metric-icon" style="background:rgba(26,133,200,0.12);color:#7dc4ea;">
+                <i class="bi bi-droplet-half"></i>
+              </div>
+              <div class="metric-label">Humedad aire</div>
+              <div>
+                <span class="metric-value" id="val-hum">--</span>
+                <span class="metric-unit">%</span>
+              </div>
+              <div class="metric-sub" id="sub-hum">Esperando datos...</div>
+              <div class="metric-trend flat" id="trend-hum">— sin datos</div>
+            </div>
+          </div>
+
+          <!-- Humedad suelo -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card soil h-100">
+              <div class="metric-icon" style="background:rgba(176,106,46,0.15);color:var(--soil-200);">
+                <i class="bi bi-moisture"></i>
+              </div>
+              <div class="metric-label">Humedad suelo</div>
+              <div>
+                <span class="metric-value" id="val-soil">--</span>
+                <span class="metric-unit">%</span>
+              </div>
+              <div class="metric-sub" id="sub-soil">Esperando datos...</div>
+              <div class="metric-trend flat" id="trend-soil">— sin datos</div>
+            </div>
+          </div>
+
+          <!-- Índice de calor -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card heat h-100">
+              <div class="metric-icon" style="background:rgba(232,151,14,0.12);color:var(--amber-400);">
+                <i class="bi bi-sun"></i>
+              </div>
+              <div class="metric-label">Índice de calor</div>
+              <div>
+                <span class="metric-value" id="val-heat">--</span>
+                <span class="metric-unit">°C</span>
+              </div>
+              <div class="metric-sub">Sensación térmica real</div>
+            </div>
+          </div>
+
+          <!-- Punto de rocío -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card dew h-100">
+              <div class="metric-icon" style="background:rgba(124,92,191,0.12);color:#b9a4e0;">
+                <i class="bi bi-cloud-drizzle"></i>
+              </div>
+              <div class="metric-label">Punto de rocío</div>
+              <div>
+                <span class="metric-value" id="val-dew">--</span>
+                <span class="metric-unit">°C</span>
+              </div>
+              <div class="metric-sub">Riesgo de condensación</div>
+            </div>
+          </div>
+
+          <!-- Última lectura -->
+          <div class="col-6 col-lg-4 col-xl-2 animate-in">
+            <div class="metric-card time h-100">
+              <div class="metric-icon" style="background:rgba(90,122,99,0.15);color:var(--text-secondary);">
+                <i class="bi bi-clock"></i>
+              </div>
+              <div class="metric-label">Última lectura</div>
+              <div class="metric-value" style="font-size:1.3rem;" id="val-time">--:--:--</div>
+              <div class="metric-sub" id="val-date">--</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Gauges + Alerts ────────────────────────────────── -->
+      <div class="row g-3 mb-section">
+
+        <!-- Gauges -->
+        <div class="col-12 col-md-5">
+          <div class="section-label">Medidores visuales</div>
+          <div class="card-custom h-100">
+            <div class="card-inner">
+              <div class="row g-0">
+
+                <!-- Temp gauge -->
+                <div class="col-4">
+                  <div class="gauge-section">
+                    <div class="gauge-title">Temp.</div>
+                    <svg class="gauge-svg" width="110" height="90" viewBox="0 0 110 90"
+                         role="img" aria-label="Medidor de temperatura">
+                      <path class="gauge-bg"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke-dasharray="188 200"/>
+                      <path id="gauge-track-temp" class="gauge-track"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke="#d94040"
+                            stroke-dasharray="0 188"/>
+                      <text id="gauge-val-temp" class="gauge-center-val" x="55" y="54">--</text>
+                      <text class="gauge-center-unit" x="55" y="70">°C</text>
+                    </svg>
+                    <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">0 – 50°C</div>
+                  </div>
+                </div>
+
+                <!-- Hum gauge -->
+                <div class="col-4">
+                  <div class="gauge-section">
+                    <div class="gauge-title">Humedad</div>
+                    <svg class="gauge-svg" width="110" height="90" viewBox="0 0 110 90"
+                         role="img" aria-label="Medidor de humedad de aire">
+                      <path class="gauge-bg"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke-dasharray="188 200"/>
+                      <path id="gauge-track-hum" class="gauge-track"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke="#1a85c8"
+                            stroke-dasharray="0 188"/>
+                      <text id="gauge-val-hum" class="gauge-center-val" x="55" y="54">--</text>
+                      <text class="gauge-center-unit" x="55" y="70">%</text>
+                    </svg>
+                    <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">0 – 100%</div>
+                  </div>
+                </div>
+
+                <!-- Soil gauge -->
+                <div class="col-4">
+                  <div class="gauge-section">
+                    <div class="gauge-title">Suelo</div>
+                    <svg class="gauge-svg" width="110" height="90" viewBox="0 0 110 90"
+                         role="img" aria-label="Medidor de humedad de suelo">
+                      <path class="gauge-bg"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke-dasharray="188 200"/>
+                      <path id="gauge-track-soil" class="gauge-track"
+                            d="M15 75 A40 40 0 1 1 95 75"
+                            stroke="#b06a2e"
+                            stroke-dasharray="0 188"/>
+                      <text id="gauge-val-soil" class="gauge-center-val" x="55" y="54">--</text>
+                      <text class="gauge-center-unit" x="55" y="70">%</text>
+                    </svg>
+                    <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">0 – 100%</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="col-12 col-md-7">
+          <div class="section-label">Alertas y recomendaciones</div>
+          <div class="d-flex flex-column gap-2 h-100" style="justify-content:space-between;">
+
+            <div class="alert-item">
+              <div class="alert-icon-wrap" style="background:rgba(26,133,200,0.1);color:var(--sky-200);">
+                <i class="bi bi-droplet-fill"></i>
+              </div>
+              <div>
+                <div class="alert-title">Estado de riego</div>
+                <div class="alert-desc" id="alert-riego-text">Sin datos aún</div>
+              </div>
+            </div>
+
+            <div class="alert-item">
+              <div class="alert-icon-wrap" style="background:rgba(232,151,14,0.1);color:var(--amber-400);">
+                <i class="bi bi-exclamation-triangle"></i>
+              </div>
+              <div>
+                <div class="alert-title">Estrés hídrico</div>
+                <div class="alert-desc" id="alert-estres-text">Sin datos aún</div>
+              </div>
+            </div>
+
+            <div class="alert-item">
+              <div class="alert-icon-wrap" style="background:rgba(124,92,191,0.1);color:#b9a4e0;">
+                <i class="bi bi-virus"></i>
+              </div>
+              <div>
+                <div class="alert-title">Riesgo de hongos</div>
+                <div class="alert-desc" id="alert-hongos-text">Sin datos aún</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Estadísticas: suelo seco / riegos / min-max ─────── -->
+      <div class="mb-section">
+        <div class="section-label">Estadísticas de seguimiento</div>
+        <div class="row g-3">
+
+          <!-- Tiempo con suelo seco -->
+          <div class="col-12 col-md-4">
+            <div class="card-custom h-100">
+              <div class="card-inner">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span style="font-size:1.3rem;">⏱</span>
+                  <span class="section-label mb-0">Suelo seco acumulado</span>
+                </div>
+                <div class="d-flex align-items-baseline gap-1">
+                  <span class="metric-value" id="stat-min-seco" style="font-size:2rem;">0</span>
+                  <span class="metric-unit">min</span>
+                </div>
+                <div class="metric-sub" id="stat-seco-estado" style="margin-top:4px;">Suelo en nivel normal</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:8px;font-family:var(--font-mono);">Umbral: suelo &lt; 25% · se reinicia al regar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contador de riegos -->
+          <div class="col-12 col-md-4">
+            <div class="card-custom h-100">
+              <div class="card-inner">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span style="font-size:1.3rem;">💧</span>
+                  <span class="section-label mb-0">Riegos detectados</span>
+                </div>
+                <div class="d-flex align-items-baseline gap-1">
+                  <span class="metric-value" id="stat-riegos" style="font-size:2rem;">0</span>
+                  <span class="metric-unit">riegos</span>
+                </div>
+                <div class="metric-sub" id="stat-ultimo-riego" style="margin-top:4px;">Sin riegos detectados aún</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:8px;font-family:var(--font-mono);">Detectado cuando suelo sube ≥ 20% en una lectura</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mínimos y máximos del día -->
+          <div class="col-12 col-md-4">
+            <div class="card-custom h-100">
+              <div class="card-inner">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span style="font-size:1.3rem;">📊</span>
+                  <span class="section-label mb-0">Mín / Máx del día</span>
+                </div>
+                <div class="d-flex flex-column gap-1" style="font-family:var(--font-mono);font-size:12px;">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span style="color:var(--text-muted);">Temp. mín</span>
+                    <span id="stat-temp-min" style="color:#7dc4ea;">-- °C <span id="stat-temp-min-hora" style="color:var(--text-muted);"></span></span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span style="color:var(--text-muted);">Temp. máx</span>
+                    <span id="stat-temp-max" style="color:#f08080;">-- °C <span id="stat-temp-max-hora" style="color:var(--text-muted);"></span></span>
+                  </div>
+                  <hr style="border-color:rgba(45,145,73,0.15);margin:4px 0;">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span style="color:var(--text-muted);">Hum. mín</span>
+                    <span id="stat-hum-min" style="color:#7dc4ea;">-- % <span id="stat-hum-min-hora" style="color:var(--text-muted);"></span></span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span style="color:var(--text-muted);">Hum. máx</span>
+                    <span id="stat-hum-max" style="color:#f08080;">-- % <span id="stat-hum-max-hora" style="color:var(--text-muted);"></span></span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:8px;font-family:var(--font-mono);" id="stat-minmax-reset">Se reinicia a medianoche</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Historical chart ───────────────────────────────── -->
+      <div class="mb-section">
+        <div class="section-label">Historial en tiempo real</div>
+        <div class="card-custom">
+          <div class="card-inner">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <div class="chart-legend">
+                <span class="legend-item">
+                  <span class="legend-pill" style="background:#d94040;"></span>
+                  Temperatura (°C)
+                </span>
+                <span class="legend-item">
+                  <span class="legend-pill" style="background:#1a85c8;"></span>
+                  Humedad aire (%)
+                </span>
+                <span class="legend-item">
+                  <span class="legend-pill" style="background:#b06a2e;"></span>
+                  Humedad suelo (%)
+                </span>
+              </div>
+              <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);">
+                Últimos 25 puntos
+              </span>
+            </div>
+            <div style="position:relative;width:100%;height:240px;">
+              <canvas id="hist-chart"
+                      role="img"
+                      aria-label="Gráfica histórica de temperatura, humedad de aire y humedad de suelo del sensor ESP32">
+                Historial de lecturas del sensor en tiempo real.
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MQTT panel ─────────────────────────────────────── -->
+      <div class="mb-section">
+        <div class="section-label">Configuración MQTT</div>
+        <div class="mqtt-panel">
+
+          <div class="mqtt-panel-header">
+            <div class="mqtt-panel-title">
+              <i class="bi bi-broadcast" style="color:var(--green-300);"></i>
+              Panel de conexión MQTT
+            </div>
+            <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);">
+              HiveMQ Public Broker
+            </span>
+          </div>
+
+          <div class="mqtt-body">
+            <div class="row g-2 mb-3">
+              <div class="col-12 col-md-6">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Broker URL (WebSocket)</div>
+                  <div class="mqtt-field-val" id="mqtt-broker">wss://broker.hivemq.com:8884/mqtt</div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Client ID</div>
+                  <div class="mqtt-field-val" id="mqtt-client">—</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Topic temperatura</div>
+                  <div class="mqtt-field-val">planta/temperatura</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Topic humedad aire</div>
+                  <div class="mqtt-field-val">planta/humedad</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Topic humedad suelo</div>
+                  <div class="mqtt-field-val">planta/suelo</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="mqtt-field">
+                  <div class="mqtt-field-label">Topic JSON único</div>
+                  <div class="mqtt-field-val">planta/datos</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- JSON format reference -->
+            <div class="mqtt-field mb-3">
+              <div class="mqtt-field-label">Formato JSON esperado (topic: planta/datos)</div>
+              <div class="mqtt-field-val">{"temperatura": 28.5, "humedad": 65.2, "suelo": 42}</div>
+            </div>
+
+            <!-- Log -->
+            <div class="mqtt-field-label mb-1">Log de actividad</div>
+            <div class="mqtt-log-box" id="mqtt-log">
+              <div class="log-entry">Iniciando sistema...</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /wrapper -->
+  </main>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <div class="wrapper">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <span class="footer-text">
+          Monitor de Plantas — ESP32 + DHT22 + HW-080 · <span>MQTT</span>
+        </span>
+        <span class="footer-text">
+          Protocolo: <span>WebSocket · wss://</span> · Chart.js · Bootstrap 5
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scripts ──────────────────────────────────────────────── -->
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+  <!-- MQTT.js (WebSocket) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+
+  <!-- App logic -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
