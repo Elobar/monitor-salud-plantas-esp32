@@ -30,7 +30,7 @@ Diseñar e implementar un sistema de monitoreo IoT que mida la temperatura, la h
 | Fuente de alimentación (cable USB / fuente 5V) | 1 | Alimentación del ESP32 |
 
 ![ESP32 y protoboard](docs/imagenes/ESP32.jpeg)
-![DHT11](docs/imagenes/DHT11.jpeg)
+![DHT11](docs/imagenes/DH11.jpeg)
 ![Sensor de suelo YL-69](docs/imagenes/YL-69.jpeg)
 
 ## Arquitectura del sistema
