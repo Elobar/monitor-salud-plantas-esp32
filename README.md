@@ -59,7 +59,7 @@ Foto del circuito en funcionamiento:
 #### Circuito activo ordenado
 ![Circuito activo](docs/imagenes/activo.jpeg)
 #### circuito activo desordenado
-![circuito desordenado](docs/imagenes/activo_DES.jpeg)
+![circuito desordenado](docs/imagenes/circuito_DES.jpeg)
 ### Videos
 El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
 
@@ -108,13 +108,13 @@ El esquema muestra:
 | Conexión del dashboard | Se probó la suscripción del dashboard al broker vía WebSocket | El dashboard mostró los datos en tiempo real y registró el log de actividad MQTT |
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
-## Prueba sensor DHT11
+### Prueba sensor DHT11
 ![Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
 ## Prueba calibracion sensor de humedad de suelo
 ![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
-## Prueba MQTT
+### Prueba MQTT
 ![Prueba MQTT](evidencias/pruebas/MQTT.png)
-## Comprobacion de conexion
+### Comprobacion de conexion
 ![Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
 
 ## Estado actual del proyecto
