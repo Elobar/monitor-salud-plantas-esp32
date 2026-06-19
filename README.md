@@ -116,7 +116,7 @@ codigo/
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
 [Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
-[Prueba calibracion sensor de humedad de suelo](evidencias/pruebas/diagrama_conexiones.png)
+[Prueba calibracion sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
 [Prueba MQTT](evidencias/pruebas/MQTT.png)
 [Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
 
