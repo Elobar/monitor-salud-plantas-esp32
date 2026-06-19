@@ -103,13 +103,8 @@ codigo/
 
 ## Esquema de conexiones
 ```
-![Esquema de conexión](esquemas/diagrama_conexion.png)
+![Esquema de conexión](esquemas/diagrama_conexiones.png)
 ```
-El esquema debe mostrar:
-- ESP32 como controlador principal.
-- Sensor DHT11 conectado al pin digital 4.
-- Sensor de suelo YL-69/HW-080 conectado al pin analógico 35.
-- Alimentación de 3.3V/5V según corresponda a cada sensor.
 
 ## Pruebas realizadas
 
@@ -121,7 +116,7 @@ El esquema debe mostrar:
 | Conexión del dashboard | Se probó la suscripción del dashboard al broker vía WebSocket | El dashboard mostró los datos en tiempo real y registró el log de actividad MQTT |
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
-*(Agrega fotos o capturas de pantalla de estas pruebas en `evidencias/pruebas/`.)*
+![Esquema de conexión](evidencias/pruebas/diagrama_conexiones.png)
 
 ## Estado actual del proyecto
 El proyecto se encuentra en fase de pruebas finales. El ESP32 ya lee correctamente los dos sensores y publica los datos por MQTT, y el dashboard web los recibe y visualiza en tiempo real con todas sus funciones (gauges, alertas, historial y estadísticas).
