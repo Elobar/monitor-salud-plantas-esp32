@@ -68,9 +68,10 @@ El código se organiza en dos partes dentro de la carpeta `codigo/`:
 
 ```
 codigo/
-├── esp32_monitor/
-│   └── esp32_monitor.ino
-└── dashboard_web/
+├── programa_principal/
+│   └── _planta.ino
+└── pagina-web/
+    ├── esp32_web.zip
     ├── index.html
     ├── css/
     │   └── style.css
