@@ -70,7 +70,7 @@ El código se organiza en dos partes dentro de la carpeta `codigo/`:
 codigo/
 ├── programa_principal/
 │   └── _planta.ino
-└── pagina-web/
+└── Pagina-web/
     ├── esp32_web.zip
     ├── index.html
     ├── css/
