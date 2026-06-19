@@ -110,7 +110,7 @@ El esquema muestra:
 ## Prueba sensor DHT11
 ![Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
 ## Prueba calibracion sensor de humedad de suelo
-![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png
+![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
 ## Prueba MQTT
 ![Prueba MQTT](evidencias/pruebas/MQTT.png)
 ## Comprobacion de conexion
