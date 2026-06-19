@@ -97,8 +97,8 @@ codigo/
 
 **Dashboard web** (`codigo/dashboard_web/`): aplicación web hecha con HTML, CSS, Bootstrap 5 y JavaScript, que se conecta vía MQTT.js (WebSocket) al broker HiveMQ, procesa los datos recibidos y los muestra mediante tarjetas, gauges SVG y una gráfica histórica con Chart.js.
 
-[Ver código del ESP32](codigo/esp32_monitor/esp32_monitor.ino)
-[Ver código del dashboard](codigo/dashboard_web/index.html)
+[Ver código del ESP32](codigo/programa_principal/_planta.ino)
+[Ver código del dashboard](codigo/Pagina-Web/index.html)
 
 ## Esquema de conexiones
 ```
