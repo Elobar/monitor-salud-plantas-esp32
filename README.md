@@ -55,12 +55,13 @@ El ESP32 se conecta a una red WiFi y publica un mensaje JSON al topic `planta/da
 ## Evidencias del proyecto
 
 ### Fotos
-Las fotos del montaje del circuito:
-[Circuito activo](docs/imagenes/activo.jpg)
+Foto del circuito en funcionamiento:
 
+![Circuito activo](docs/imagenes/activo.jpg)
 
 ### Videos
 El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
+
 [Ver video de funcionamiento](https://drive.google.com/file/d/1LF3oYPrtLresuND9U_8BYQq1s2_3Niay/view?usp=sharing)
 
 ## Código fuente
@@ -70,8 +71,7 @@ El código se organiza en dos partes dentro de la carpeta `codigo/`:
 codigo/
 ├── programa_principal/
 │   └── _planta.ino
-└── Pagina-web/
-    ├── esp32_web.zip
+└── Pagina-Web/
     ├── index.html
     ├── css/
     │   └── style.css
@@ -79,18 +79,23 @@ codigo/
         └── main.js
 ```
 
-**Firmware ESP32** (`codigo/esp32_monitor/esp32_monitor.ino`): lee el DHT11 y el sensor de suelo YL-69/HW-080, calcula el porcentaje de humedad del suelo con calibración propia, y publica un JSON cada 5 segundos al broker MQTT.
+**Firmware ESP32** (`codigo/programa_principal/_planta.ino`): lee el DHT11 y el sensor de suelo YL-69/HW-080, calcula el porcentaje de humedad del suelo con calibración propia, y publica un JSON cada 5 segundos al broker MQTT.
 
-**Dashboard web** (`codigo/dashboard_web/`): aplicación web hecha con HTML, CSS, Bootstrap 5 y JavaScript, que se conecta vía MQTT.js (WebSocket) al broker HiveMQ, procesa los datos recibidos y los muestra mediante tarjetas, gauges SVG y una gráfica histórica con Chart.js.
+**Dashboard web** (`codigo/Pagina-Web/`): aplicación web hecha con HTML, CSS, Bootstrap 5 y JavaScript, que se conecta vía MQTT.js (WebSocket) al broker HiveMQ, procesa los datos recibidos y los muestra mediante tarjetas, gauges SVG y una gráfica histórica con Chart.js.
 
 [Ver código del ESP32](codigo/programa_principal/_planta.ino)
 [Ver código del dashboard](codigo/Pagina-Web/index.html)
-[Ver código completo del dashboard](codigo/Pagina-Web/)
+[Ver carpeta completa del dashboard](codigo/Pagina-Web/)
 
 ## Esquema de conexiones
 
-[Esquema de conexión](esquemas/diagrama_conexiones.png)
+![Esquema de conexión](esquemas/diagrama_conexiones.png)
 
+El esquema muestra:
+- ESP32 como controlador principal.
+- Sensor DHT11 conectado al pin digital 4.
+- Sensor de suelo YL-69/HW-080 conectado al pin analógico 35.
+- Alimentación de 3.3V/5V según corresponda a cada sensor.
 
 ## Pruebas realizadas
 
@@ -102,10 +107,10 @@ codigo/
 | Conexión del dashboard | Se probó la suscripción del dashboard al broker vía WebSocket | El dashboard mostró los datos en tiempo real y registró el log de actividad MQTT |
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
-[Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
-[Prueba calibracion sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
-[Prueba MQTT](evidencias/pruebas/MQTT.png)
-[Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
+![Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
+![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
+![Prueba MQTT](evidencias/pruebas/MQTT.png)
+![Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
 
 ## Estado actual del proyecto
 El proyecto se encuentra en fase de pruebas finales. El ESP32 ya lee correctamente los dos sensores y publica los datos por MQTT, y el dashboard web los recibe y visualiza en tiempo real con todas sus funciones (gauges, alertas, historial y estadísticas).
