@@ -16,6 +16,16 @@ const char* MQTT_CLIENT_ID = "esp32-monitor-plantas";
 #define PIN_DHT11  4
 #define PIN_SUELO  35
 
+/* ── Calibración del sensor de suelo YL-69 ──────────────────────
+   Valores reales medidos con el sketch de calibración:
+   SECO  (sensor al aire)       → 4095
+   MOJADO (varillas en agua)    → 1800 */
+const int ADC_SECO   = 4095;
+const int ADC_MOJADO = 1800;
+
+/* ── Suavizado de lectura del suelo ── */
+const int MUESTRAS_SUELO = 10;
+
 /* ── Intervalo de publicación ── */
 const unsigned long INTERVALO_MS = 5000;
 
@@ -61,15 +71,24 @@ void conectarMQTT() {
 }
 
 /* ── Leer sensor de suelo ── */
+// Promedia varias lecturas para suavizar el ruido del ADC, y usa
+// los valores reales de calibración (ADC_SECO / ADC_MOJADO) en vez
+// de los extremos teóricos 4095/0.
 int leerHumedadSuelo() {
-  int lecturaADC = analogRead(PIN_SUELO);
-  int porcentaje = map(lecturaADC, 4095, 0, 0, 100);
+  long suma = 0;
+  for (int i = 0; i < MUESTRAS_SUELO; i++) {
+    suma += analogRead(PIN_SUELO);
+    delay(10);
+  }
+  int lecturaADC = suma / MUESTRAS_SUELO;
+
+  int porcentaje = map(lecturaADC, ADC_SECO, ADC_MOJADO, 0, 100);
   return constrain(porcentaje, 0, 100);
 }
 
 /* ── Setup ── */
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(1000);
   dht.setup(PIN_DHT11, DHTesp::DHT11);
   conectarWiFi();
