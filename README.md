@@ -56,9 +56,9 @@ El ESP32 se conecta a una red WiFi y publica un mensaje JSON al topic `planta/da
 
 ### Fotos
 Foto del circuito en funcionamiento:
-## Circuito activo ordenado
+#### Circuito activo ordenado
 ![Circuito activo](docs/imagenes/activo.jpeg)
-## circuito activo desordenado
+#### circuito activo desordenado
 ![circuito desordenado](docs/imagenes/activo_DES.jpeg)
 ### Videos
 El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
