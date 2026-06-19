@@ -29,6 +29,10 @@ Diseñar e implementar un sistema de monitoreo IoT que mida la temperatura, la h
 | Cables y protoboard | Varios | Conexión del circuito |
 | Fuente de alimentación (cable USB / fuente 5V) | 1 | Alimentación del ESP32 |
 
+![ESP32 y protoboard](docs/imagenes/ESP32.jpg)
+![DHT11](docs/imagenes/DHT11.jpg)
+![Sensor de suelo YL-69](docs/imagenes/YL-69.jpg)
+
 ## Arquitectura del sistema
 
 ```
@@ -38,11 +42,6 @@ YL-69/HW-080 ─┘                         (topic: planta/datos)
 ```
 
 El ESP32 se conecta a una red WiFi y publica un mensaje JSON al topic `planta/datos` en el broker público `broker.hivemq.com`. El dashboard web, ejecutado en el navegador, se suscribe al mismo topic mediante una conexión WebSocket (`wss://broker.hivemq.com:8884/mqtt`) y actualiza la interfaz cada vez que llega un nuevo dato.
-
-También se puede incluir una imagen del diagrama:
-```
-![Diagrama de bloques](docs/imagenes/diagrama_bloques.png)
-```
 
 ## Funcionamiento
 1. El ESP32 se conecta a la red WiFi y luego al broker MQTT.
@@ -57,19 +56,8 @@ También se puede incluir una imagen del diagrama:
 
 ### Fotos
 Las fotos del montaje del circuito:
-```
-docs/imagenes/
-```
-Ejemplos de nombres recomendados:
-- `montaje_inicial.jpg`
-- `conexion_sensores.jpg`
-- `prototipo_final.jpg`
-- `dashboard_funcionando.jpg`
+![Circuito activo](docs/imagenes/activo.jpg)
 
-Para insertarlas en este README:
-```
-![Montaje del circuito](docs/imagenes/montaje_inicial.jpg)
-```
 
 ### Videos
 El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
