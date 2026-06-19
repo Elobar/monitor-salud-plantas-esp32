@@ -56,7 +56,7 @@ También se puede incluir una imagen del diagrama:
 ## Evidencias del proyecto
 
 ### Fotos
-Las fotos del montaje y del circuito deben guardarse en:
+Las fotos del montaje del circuito:
 ```
 docs/imagenes/
 ```
@@ -72,7 +72,6 @@ Para insertarlas en este README:
 ```
 
 ### Videos
-Los videos de funcionamiento deben guardarse en `docs/videos/` o subirse a una plataforma externa (YouTube, Drive, etc.) y enlazarse así:
 ```
 [Ver video de funcionamiento](docs/videos/prueba_funcionamiento.mp4)
 ```
@@ -102,9 +101,9 @@ codigo/
 [Ver código completo del dashboard](codigo/Pagina-Web/)
 
 ## Esquema de conexiones
-```
-![Esquema de conexión](esquemas/diagrama_conexiones.png)
-```
+
+[Esquema de conexión](esquemas/diagrama_conexiones.png)
+
 
 ## Pruebas realizadas
 
@@ -116,7 +115,10 @@ codigo/
 | Conexión del dashboard | Se probó la suscripción del dashboard al broker vía WebSocket | El dashboard mostró los datos en tiempo real y registró el log de actividad MQTT |
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
-![Esquema de conexión](evidencias/pruebas/diagrama_conexiones.png)
+[Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
+[Prueba calibracion sensor de humedad de suelo](evidencias/pruebas/diagrama_conexiones.png)
+[Prueba MQTT](evidencias/pruebas/MQTT.png)
+[Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
 
 ## Estado actual del proyecto
 El proyecto se encuentra en fase de pruebas finales. El ESP32 ya lee correctamente los dos sensores y publica los datos por MQTT, y el dashboard web los recibe y visualiza en tiempo real con todas sus funciones (gauges, alertas, historial y estadísticas).
