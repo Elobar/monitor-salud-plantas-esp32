@@ -99,6 +99,7 @@ codigo/
 
 [Ver código del ESP32](codigo/programa_principal/_planta.ino)
 [Ver código del dashboard](codigo/Pagina-Web/index.html)
+[Ver código completo del dashboard](codigo/Pagina-Web/)
 
 ## Esquema de conexiones
 ```
