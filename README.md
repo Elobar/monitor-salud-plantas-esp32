@@ -72,10 +72,8 @@ Para insertarlas en este README:
 ```
 
 ### Videos
-```
-[Ver video de funcionamiento](docs/videos/prueba_funcionamiento.mp4)
-```
-El video debe mostrar el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
+El video muestra el sistema completo funcionando: ESP32 enviando datos y el dashboard actualizándose en tiempo real.
+[Ver video de funcionamiento](docs/videos/prueba_conjunta.mp4)
 
 ## Código fuente
 El código se organiza en dos partes dentro de la carpeta `codigo/`:
