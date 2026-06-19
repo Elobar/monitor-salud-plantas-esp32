@@ -107,9 +107,13 @@ El esquema muestra:
 | Conexión del dashboard | Se probó la suscripción del dashboard al broker vía WebSocket | El dashboard mostró los datos en tiempo real y registró el log de actividad MQTT |
 | Detección de riego | Se simuló un aumento brusco de humedad del suelo | El sistema detectó el riego y actualizó el contador correspondiente |
 
+## Prueba sensor DHT11
 ![Prueba sensor DHT11](evidencias/pruebas/sensor_DHT11.png)
-![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png)
+## Prueba calibracion sensor de humedad de suelo
+![Prueba calibración sensor de humedad de suelo](evidencias/pruebas/sensor_calibracion.png
+## Prueba MQTT
 ![Prueba MQTT](evidencias/pruebas/MQTT.png)
+## Comprobacion de conexion
 ![Prueba registro log](evidencias/pruebas/MQTT_logDASH.png)
 
 ## Estado actual del proyecto
